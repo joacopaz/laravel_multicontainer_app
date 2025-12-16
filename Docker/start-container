@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+if [ "$SUPERVISOR_PHP_USER" != "root" ] && [ "$SUPERVISOR_PHP_USER" != "lawnstarter" ]; then
+    echo "You should set SUPERVISOR_PHP_USER to either 'lawnstarter' or 'root'."
+    exit 1
+fi
+
+if [ ! -z "$WWWUSER" ]; then
+    usermod -u $WWWUSER lawnstarter
+fi
+
+if [ ! -d /.composer ]; then
+    mkdir /.composer
+fi
+
+chmod -R ugo+rw /.composer
+
+while ! nc -z -w 1 $DB_HOST $DB_PORT; do
+    echo "Waiting for database connection... host: $DB_HOST port: $DB_PORT"
+    sleep 1
+done
+
+echo "Database is ready. Running fresh migration and key generation..."
+
+if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
+    php artisan cache:table
+    php artisan key:generate --force
+    php artisan migrate --force
+else
+    gosu $WWWUSER php artisan cache:table
+    gosu $WWWUSER php artisan key:generate --force
+    gosu $WWWUSER php artisan migrate --force
+fi
+
+echo "Setup complete. Starting application services..."
+
+if [ $# -gt 0 ]; then
+    if [ "$SUPERVISOR_PHP_USER" = "root" ]; then
+        exec "$@"
+    else
+        exec gosu $WWWUSER "$@"
+    fi
+else
+    exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+fi

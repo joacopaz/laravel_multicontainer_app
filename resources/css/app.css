@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@theme {
+    --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --green-teal: #dadada;
+    --warm-grey: #848448bf;
+    --pinkish-grey: #c4c4c4;
+}
+
+@layer base {
+    h2 {
+        @apply text-lg font-bold text-[#000];
+    }
+
+    h3 {
+        @apply text-base font-bold text-[#000];
+    }
+}
+
+@layer components {
+    .sw-shadow {
+        box-shadow: var(--shadow-x, 0) var(--shadow-y, 0) var(--shadow-blur, 0) var(--shadow-spread, 0) var(--shadow-color, var(--green-teal));
+    }
+
+    .pinkish-grey-color {
+        @apply text-[var(--pinkish-grey)];
+    }
+}
