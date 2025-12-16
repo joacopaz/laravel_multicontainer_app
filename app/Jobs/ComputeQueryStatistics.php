@@ -34,7 +34,6 @@ class ComputeQueryStatistics implements ShouldQueue
 
         // preferring raw sql to avoid bringing large datasets into PHP memory
         $generalStats = $queryModel->select(
-            DB::raw('COUNT(*) as total_queries'),
             DB::raw('COUNT(CASE WHEN served_from_cache = true THEN 1 END) as total_cached_queries'),
             DB::raw('AVG(duration_ms) as average_duration_ms')
         )->first();
@@ -83,8 +82,6 @@ class ComputeQueryStatistics implements ShouldQueue
         array $topFiveQueries = [],
         ?int $mostPopularHour = null,
     ): void {
-        Log::debug("Initializing with: {$calculatedAt} {$totalQueries} {$totalCachedQueries} {$averageDuration} {$mostPopularHour}", $topFiveQueries);
-
         $statisticModel->create([
             'total_queries' => $totalQueries,
             'total_cached_queries' => $totalCachedQueries,

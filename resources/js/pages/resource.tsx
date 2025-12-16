@@ -24,7 +24,7 @@ export default function Resource({ metadata }: SharedData) {
                                 <span className="text-[14px]">Eye Color: {metadata.properties.eye_color}</span>
                                 <span className="text-[14px]">Hair Color: {metadata.properties.hair_color}</span>
                                 <span className="text-[14px]">Height: {metadata.properties.height}</span>
-                                <span>Mass: {metadata.properties.mass}</span>
+                                <span className="text-[14px]">Mass: {metadata.properties.mass}</span>
                             </>
                         ) : (
                             <p className="mt-[5px] text-[14px] whitespace-pre-line">{metadata.properties.opening_crawl}</p>
