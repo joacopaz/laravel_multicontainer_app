@@ -85,6 +85,10 @@ Can be viewed in cURL, browser or any networking tool.
 
 - For tests run `composer test`
 
+- If the local env is not working, you can still run them in the
+container, just run `php artisan migrate --env=testing --force` and `php artisan
+test` inside the container
+
 ### Disclaimer
 
 - No AI wrote this code, it's only use was for research purposes (sort of like an
